@@ -1,3 +1,7 @@
+<div class="choose_file float-right">
+  <button type="button" class="btn btn-primary">+ Add Merchant</button>
+  <input type="file" (change)="onFileSelect($event.target)" accept=".csv" />
+</div>
 <table class="table table-stripped table-hover">
 	<thead>
 		<th>Name</th>
@@ -20,7 +24,7 @@
 			    <span class="caret"></span></button>
 			    <div class="dropdown-menu">
 			      <a class="dropdown-item" routerLink="/merchant/{{merchant.id}}">View</a>
-			      <a class="dropdown-item" data-toggle="modal" data-target="#editMerchantModal" (click)="singleMerchant = merchant">Edit</a>
+			      <a class="dropdown-item" (click)="setMerchantForm(merchant)" data-toggle="modal" data-target="#editMerchantModal">Edit</a>
 			      <a class="dropdown-item" data-toggle="modal" data-target="#deleteMerchantModal" (click)="singleMerchant = merchant">Delete</a>
 			    </div>
 			  </div>
@@ -102,3 +106,4 @@
     </div>
   </div>
 </div>
+

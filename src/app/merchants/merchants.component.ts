@@ -17,7 +17,8 @@ export class MerchantsComponent implements OnInit {
   merchantForm: FormGroup;
   merchants: any[] = []
   singleMerchant: any = {}
-
+  csvFile;
+  error: string;
 
   ngOnInit() {
     this.getAllMerchants();
@@ -47,11 +48,45 @@ export class MerchantsComponent implements OnInit {
   }
 
   editMerchant(){
-    this.merchantService.getAllMerchants()
+    this.merchantService.editMerchant(this.singleMerchant.id, this.merchantForm.value)
     .subscribe((res: any)=>{
-      console.log(res)
+      let index = this.merchants.findIndex(mer=> mer.id === this.singleMerchant.id)
+      this.merchants[index].name = this.merchantForm.value.name;
+      this.merchants[index].description = this.merchantForm.value.description;
+      this.merchants[index].status = this.merchantForm.value.status;
+      this.merchantForm.reset();
     },
     err=>{console.log(err)})
   }
 
+  setMerchantForm(merchant){
+    this.singleMerchant = merchant
+    this.merchantForm.setValue({
+      name: merchant.name,
+      status: merchant.status,
+      description: merchant.description
+    })
+  }
+
+  onFileSelect(input: HTMLInputElement) {
+    this.error = null;
+    let files = input.files;
+    if (files && files.length) {
+      this.csvFile = files[0];
+      this.addMerchants()
+    }
+  }
+
+  addMerchants(){
+    var formData = new FormData();
+    formData.append('merchant[csv]', this.csvFile);
+    this.merchantService.addMerchants(formData)
+    .subscribe(
+      response => {
+        let msg = "CSV successfully uploaded! We're processing the upload and will take few minutes";
+      },
+      error => { this.error = "An error occurred while uploading the file. Please try again after some time.";
+      }
+    );
+  }
 }
