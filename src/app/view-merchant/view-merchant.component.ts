@@ -13,35 +13,39 @@ export class ViewMerchantComponent implements OnInit {
   merchant: any = {};
   id: string;
   paymentForm: FormGroup;
-	
-	constructor(
-	  private activatedRoute: ActivatedRoute,
-		private merchantService: MerchantsService,
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private merchantService: MerchantsService,
     private fb: FormBuilder
-	) { }
+  ) { }
 
   ngOnInit() {
-  	this.id = this.activatedRoute.snapshot.params.id
-  	this.getMerchant();
-  	this.paymentForm = this.fb.group({
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.getMerchant();
+    this.paymentForm = this.fb.group({
       'amount': [null, Validators.required],
       'status': ['processed']
     });
   }
 
-  getMerchant(){
-  	this.merchantService.getMerchant(this.id)
-  	.subscribe((res: any)=>{
-  		this.merchant = res.data.merchant
-  	},
-  	err=>{console.log(err)})
+  getMerchant() {
+    this.merchantService.getMerchant(this.id)
+    .subscribe(
+      (res: any) => {
+        this.merchant = res.data.merchant;
+      },
+      err => { console.log(err); }
+    );
   }
 
-  addPayment(){
-  	this.merchantService.addPayment(this.id, this.paymentForm.value)
-  	.subscribe((res: any)=>{
-  		this.merchant.transactions = [res.data.transaction, ...this.merchant.transactions]
-  	},
-  	err=>{console.log(err)})
+  addPayment() {
+    this.merchantService.addPayment(this.id, this.paymentForm.value)
+    .subscribe(
+      (res: any) => {
+        this.merchant.transactions = [res.data.transaction, ...this.merchant.transactions];
+      },
+      err => { console.log(err); }
+    )
   }
 }

@@ -15,10 +15,9 @@ export class MerchantsComponent implements OnInit {
   ) { }
 
   merchantForm: FormGroup;
-  merchants: any[] = []
-  singleMerchant: any = {}
+  merchants: any[] = [];
+  singleMerchant: any = {};
   csvFile;
-  error: string;
 
   ngOnInit() {
     this.getAllMerchants();
@@ -29,63 +28,66 @@ export class MerchantsComponent implements OnInit {
     });
   }
 
-  getAllMerchants(){
+  getAllMerchants() {
     this.merchantService.getAllMerchants()
     .subscribe(
-      (res: any)=>{
-        this.merchants = res.data.merchant
+      (res: any) => {
+        this.merchants = res.data.merchant;
       },
-      err=>{console.log(err)}
-    )
+      err => { console.log(err); }
+    );
   }
 
-  deleteMerchant(){
+  deleteMerchant() {
     this.merchantService.deleteMerchant(this.singleMerchant.id)
-    .subscribe((res: any)=>{
-      this.merchants =this.merchants.filter(mer=>mer.id !== this.singleMerchant.id)
-    },
-    err=>{console.log(err)})
+    .subscribe(
+      (res: any) => {
+        this.merchants = this.merchants.filter(mer => mer.id !== this.singleMerchant.id);
+      },
+      err => { console.log(err); }
+    );
   }
 
-  editMerchant(){
+  editMerchant() {
     this.merchantService.editMerchant(this.singleMerchant.id, this.merchantForm.value)
-    .subscribe((res: any)=>{
-      let index = this.merchants.findIndex(mer=> mer.id === this.singleMerchant.id)
-      this.merchants[index].name = this.merchantForm.value.name;
-      this.merchants[index].description = this.merchantForm.value.description;
-      this.merchants[index].status = this.merchantForm.value.status;
-      this.merchantForm.reset();
-    },
-    err=>{console.log(err)})
+    .subscribe(
+      (res: any) => {
+        const index = this.merchants.findIndex(mer => mer.id === this.singleMerchant.id);
+        this.merchants[index].name = this.merchantForm.value.name;
+        this.merchants[index].description = this.merchantForm.value.description;
+        this.merchants[index].status = this.merchantForm.value.status;
+        this.merchantForm.reset();
+      },
+      err => { console.log(err); }
+    );
   }
 
-  setMerchantForm(merchant){
-    this.singleMerchant = merchant
+  setMerchantForm(merchant) {
+    this.singleMerchant = merchant;
     this.merchantForm.setValue({
       name: merchant.name,
       status: merchant.status,
       description: merchant.description
-    })
+    });
   }
 
   onFileSelect(input: HTMLInputElement) {
-    this.error = null;
-    let files = input.files;
+    const files = input.files;
     if (files && files.length) {
       this.csvFile = files[0];
-      this.addMerchants()
+      this.addMerchants();
     }
   }
 
-  addMerchants(){
-    var formData = new FormData();
+  addMerchants() {
+    const formData = new FormData();
     formData.append('merchant[csv]', this.csvFile);
     this.merchantService.addMerchants(formData)
     .subscribe(
       response => {
-        let msg = "CSV successfully uploaded! We're processing the upload and will take few minutes";
+        console.log('CSV successfully uploaded! We are processing the upload and will take few minutes');
       },
-      error => { this.error = "An error occurred while uploading the file. Please try again after some time.";
+      error => { console.log('An error occurred while uploading the file. Please try again after some time.');
       }
     );
   }
