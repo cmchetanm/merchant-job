@@ -1,0 +1,104 @@
+<table class="table table-stripped table-hover">
+	<thead>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Status</th>
+		<th>Description</th>
+		<th>Transaction</th>
+		<th>Action</th>
+	</thead>
+	<tbody>
+		<tr *ngFor="let merchant of merchants">
+			<td>{{merchant.name}}</td>
+			<td>{{merchant.email}}</td>
+			<td>{{merchant.status}}</td>
+			<td>{{merchant.description}}</td>
+			<td>{{ merchant.total_transaction_sum}}</td>
+			<td>
+				<div class="dropdown">
+			    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Action
+			    <span class="caret"></span></button>
+			    <div class="dropdown-menu">
+			      <a class="dropdown-item" routerLink="/merchant/{{merchant.id}}">View</a>
+			      <a class="dropdown-item" data-toggle="modal" data-target="#editMerchantModal" (click)="singleMerchant = merchant">Edit</a>
+			      <a class="dropdown-item" data-toggle="modal" data-target="#deleteMerchantModal" (click)="singleMerchant = merchant">Delete</a>
+			    </div>
+			  </div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- The Delete Modal -->
+<div class="modal" id="deleteMerchantModal">
+  <div class="modal-dialog">
+    <div class="modal-content">   
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Merchant</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to delete the merchant <b>{{singleMerchant.name}}</b> ?
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="deleteMerchant()" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<!-- The Edit Modal -->
+<div class="modal" id="editMerchantModal">
+  <div class="modal-dialog">
+    <div class="modal-content">   
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Merchant</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+      	<form [formGroup]="merchantForm">
+      		<div class="row">
+			      <div class="col-md-6">
+			        <div class="form-group">
+			          <label>Name</label>
+			          <input type="text" class="form-control" name="name" formControlName="name">
+			        </div>
+
+			        <div class="form-group">
+			          <label>Description</label>
+			          <textarea class="form-control" rows="1" name="description" formControlName="description"></textarea>
+			        </div>
+			      </div>
+			      <div class="col-md-6">
+			      	<div class="form-group">
+	            	<label>Status</label>
+	            	<select class="form-control m-b" name="status" formControlName="status">
+		              <option value="null">Select Status</option>
+		              <option value="active">Active</option>
+		              <option value="inactive">Inactive</option>
+		            </select>
+          		</div>
+        		</div>
+     			</div>
+     		</form>
+			</div>      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" (click)="editMerchant()" data-dismiss="modal">Edit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>

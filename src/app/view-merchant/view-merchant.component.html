@@ -1,0 +1,18 @@
+<h4>{{merchant.name}}</h4>
+<h6>{{merchant.email}}</h6>
+<h6>{{merchant.status}}</h6>
+<h6>{{merchant.description}}</h6>
+<table class="table table-stripped">
+	<thead>
+		<th>Id</th>
+		<th>Amount</th>
+		<th>Status</th>
+	</thead>
+	<tbody>
+		<tr *ngFor="let transaction of merchant.transactions">
+      <td>{{transaction.id}}</td>
+			<td>{{transaction.amount}}</td>
+			<td>{{transaction.status}}</td>
+		</tr>
+	</tbody>
+</table>
